@@ -1,8 +1,6 @@
 # depslib dependency file v1.0
-1514136988 source:d:\material cefet\computacaografica\tps\tp1\tp1 - cg\pingphongtp1\main.cpp
-	<GLUT/glut.h>
-	<GL/glut.h>
-	<stdlib.h>
+1567992674 source:d:\material cefet\computacaografica\tps\tp1\tp1 - cg\pingphongtp1\main.cpp
+	"bib.h"
 
 1426360528 c:\program files (x86)\codeblocks\mingw\include\gl\glut.h
 	"freeglut_std.h"
@@ -227,4 +225,46 @@
 1301111164 c:\program files (x86)\codeblocks\mingw\include\gl\glu.h
 	<stddef.h>
 	<GL/gl.h>
+
+1567994043 d:\material cefet\computacaografica\tps\tp1\tp1 - cg\pingphongtp1\bib.h
+	<iostream>
+	<cmath>
+	<cstdlib>
+	<GL/glew.h>
+	<GL/freeglut.h>
+	<SOIL/SOIL.h>
+
+1501501581 c:\program files (x86)\codeblocks\mingw\include\gl\glew.h
+	<stddef.h>
+	<inttypes.h>
+	<stdint.h>
+	<inttypes.h>
+	<Availability.h>
+	<OpenGL/glu.h>
+	<GL/glu.h>
+
+1341006772 c:\program files (x86)\codeblocks\mingw\include\inttypes.h
+	<_mingw.h>
+	<stdint.h>
+	<stddef.h>
+
+1341006776 c:\program files (x86)\codeblocks\mingw\include\stdint.h
+	<stddef.h>
+
+1426360528 c:\program files (x86)\codeblocks\mingw\include\gl\freeglut.h
+	"freeglut_std.h"
+	"freeglut_ext.h"
+
+1426360528 c:\program files (x86)\codeblocks\mingw\include\gl\freeglut_ext.h
+	<stdarg.h>
+
+1215465208 c:\program files (x86)\codeblocks\mingw\include\soil\soil.h
+
+1568003041 source:d:\material cefet\computacaografica\tps\tp1\tp1 - cg\pingphongtp1\bib.cpp
+	"bib.h"
+	"globalVariaveis.h"
+
+1301111164 c:\program files (x86)\codeblocks\mingw\include\gl.h
+
+1568002442 d:\material cefet\computacaografica\tps\tp1\tp1 - cg\pingphongtp1\globalvariaveis.h
 
