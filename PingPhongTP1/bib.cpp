@@ -96,6 +96,15 @@ void HitBox(int x, int y, int altura, int largura){
     glEnd();
 }
 
+void HitBox2(int x, int y, int altura, int largura){
+    glBegin(GL_TRIANGLE_FAN);
+        glTexCoord2f(0, 0);  glVertex3f(x, y, 0);
+        glTexCoord2f(1, 0); glVertex3f(largura+x, y, 0);
+        glTexCoord2f(1, 1); glVertex3f(largura+x, altura+y, 0);
+        glTexCoord2f(0, 1);  glVertex3f(x, altura+y, 0);
+    glEnd();
+}
+
 void redimensionar(int width, int height) {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -132,7 +141,7 @@ void inicializa(){
     glEnable(GL_BLEND );
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    idTexturaMario = carregaTextura("balle.png");
+    idTexturaMario = carregaTextura("sliderVermelho.png");
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 
@@ -140,6 +149,12 @@ void inicializa(){
     incrementoY = 100;
     posX = 100;
     posY = 100;
+
+    incrementoX2 = 100;
+    incrementoY2 = 100;
+    posX2 = 700;
+    posY2 = 100;
+
     flag = 0;
 }
 
@@ -170,10 +185,26 @@ void display(){
     }
 
     if (keys['d'] != 0){
-        posX = posX + incrementoX;
+        posX2 = posX2 + incrementoX2;
     }
 
-    HitBox(posX,posY,50,50);
+    if (keys['y'] != 0){
+        posY2 = posY2 + incrementoY2;
+    }
+    if (keys['h'] != 0){
+        posY2 = posY2 + incrementoY2;
+    }
+
+    if (keys['j'] != 0){
+        posX2 = posX2 + incrementoX2;
+    }
+
+    if (keys['g'] != 0){
+        posX2 = posX2 + incrementoX2;
+    }
+
+    HitBox2(posX,posY,127,33);
+    HitBox2(posX2, posY2, 127, 33);
 
     glDisable(GL_TEXTURE_2D);
 
@@ -187,7 +218,7 @@ void keyboard(unsigned char key, int x, int y){
         exit(0);
         break;
     case 'w':
-        if (posY >= hud.getScreenSizeY()){
+        if (posY + 127 >= hud.getScreenSizeY()){
             incrementoY = 0;
         } else {
             incrementoY = 10;
@@ -204,23 +235,23 @@ void keyboard(unsigned char key, int x, int y){
         keys['s'] = 1;
         flag = 0;
         break;
-    case 'a':
-        if (posX <= 50){
-            incrementoX = 0;
+    case 'y':
+        if (posY2 + 127 >= hud.getScreenSizeY()){
+            incrementoY2 = 0;
         } else {
-            incrementoX = -10;
+            incrementoY2 = 10;
         }
-        keys['a'] = 1;
-        flag = 1;
+        keys['y'] = 1;
+        flag = 0;
         break;
-    case 'd':
-        if (posY >= hud.getScreenSizeX()){
-            incrementoX = 0;
+    case 'h':
+        if (posY2 <= 0){
+            incrementoY2 = 0;
         } else {
-            incrementoX  = 10;
+            incrementoY2 = -10;
         }
-        keys['d'] = 1;
-        flag = 1;
+        keys['h'] = 1;
+        flag = 0;
         break;
     default:
         break;
@@ -236,7 +267,7 @@ void keyboardUp(unsigned char key, int x, int y){
         exit(0);
         break;
     case 'w':
-        if (posY >= hud.getScreenSizeY()){
+        if (posY + 127 >= hud.getScreenSizeY()){
             incrementoY = 0;
         } else {
             incrementoY = 10;
@@ -253,23 +284,23 @@ void keyboardUp(unsigned char key, int x, int y){
         keys['s'] = 0;
         flag = 0;
         break;
-    case 'a':
-        if (posX <= 0){
-            incrementoX = 0;
+    case 'y':
+        if (posY2 + 127 >= hud.getScreenSizeY()){
+            incrementoY2 = 0;
         } else {
-            incrementoX = -10;
+            incrementoY2 = 10;
         }
-        keys['a'] = 0;
-        flag = 1;
+        keys['y'] = 0;
+        flag = 0;
         break;
-    case 'd':
-        if (posY >= hud.getScreenSizeX()){
-            incrementoX = 0;
+    case 'h':
+        if (posY2 <= 0){
+            incrementoY2 = 0;
         } else {
-            incrementoX  = 10;
+            incrementoY2 = -10;
         }
-        keys['d'] = 0;
-        flag = 1;
+        keys['h'] = 0;
+        flag = 0;
         break;
     default:
         break;

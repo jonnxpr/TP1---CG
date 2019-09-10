@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1567992674 source:d:\material cefet\computacaografica\tps\tp1\tp1 - cg\pingphongtp1\main.cpp
+1568142881 source:d:\material cefet\computacaografica\tps\tp1\tp1 - cg\pingphongtp1\main.cpp
 	"bib.h"
 
 1426360528 c:\program files (x86)\codeblocks\mingw\include\gl\glut.h
@@ -226,7 +226,7 @@
 	<stddef.h>
 	<GL/gl.h>
 
-1567994043 d:\material cefet\computacaografica\tps\tp1\tp1 - cg\pingphongtp1\bib.h
+1568142981 d:\material cefet\computacaografica\tps\tp1\tp1 - cg\pingphongtp1\bib.h
 	<iostream>
 	<cmath>
 	<cstdlib>
@@ -260,11 +260,12 @@
 
 1215465208 c:\program files (x86)\codeblocks\mingw\include\soil\soil.h
 
-1568003041 source:d:\material cefet\computacaografica\tps\tp1\tp1 - cg\pingphongtp1\bib.cpp
+1568144780 source:d:\material cefet\computacaografica\tps\tp1\tp1 - cg\pingphongtp1\bib.cpp
 	"bib.h"
 	"globalVariaveis.h"
 
 1301111164 c:\program files (x86)\codeblocks\mingw\include\gl.h
 
-1568002442 d:\material cefet\computacaografica\tps\tp1\tp1 - cg\pingphongtp1\globalvariaveis.h
+1568143977 d:\material cefet\computacaografica\tps\tp1\tp1 - cg\pingphongtp1\globalvariaveis.h
+	"bib.h"
 
