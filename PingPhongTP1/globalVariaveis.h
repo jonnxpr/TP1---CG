@@ -6,6 +6,7 @@
 **************************************************************/
 HUD hud(800, 800, 0, 0, 0);
 GLuint idTexturaMario;
+GLuint logoTP1;
 int incrementoX, incrementoY;
 int incrementoX2, incrementoY2;
 int posX, posY;

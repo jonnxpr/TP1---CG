@@ -142,7 +142,7 @@ void inicializa(){
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     idTexturaMario = carregaTextura("sliderVermelho.png");
-
+    logoTP1 = carregaTextura("tp1Logo.png");
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 
     incrementoX = 100;
@@ -206,8 +206,13 @@ void display(){
     HitBox2(posX,posY,127,33);
     HitBox2(posX2, posY2, 127, 33);
 
-    glDisable(GL_TEXTURE_2D);
 
+
+    glBindTexture(GL_TEXTURE_2D, logoTP1);
+
+    HitBox2(400,400, 100,100);
+
+    glDisable(GL_TEXTURE_2D);
     glutSwapBuffers();
 
 }
