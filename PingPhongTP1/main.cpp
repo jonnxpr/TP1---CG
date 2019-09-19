@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
     glutInitContextVersion(2, 1);
 
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
-    glutInitWindowSize(800, 800);
+    glutInitWindowSize(1500, 955);
     glutInitWindowPosition(0, 0);
 
 
@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
     glutKeyboardUpFunc(keyboardUp);
     glutTimerFunc(1000.0/60.0, atualizaCena, 0);
     //glutIdleFunc(idle);
-
+    glutMouseFunc(mouse);
     glutMainLoop();
 
     return 0;

@@ -33,25 +33,9 @@ void display();
 void keyboard(unsigned char key, int x, int y);
 void keyboardUp(unsigned char key, int x, int y);
 void atualizaCena(int periodo);
-GLuint carregaTextura(string filename);
-void escreveTexto(void * font, char *s, float x, float y, float z);
+void mouse(int button, int state, int x, int y);
+GLuint carregaTextura(const char* arquivo);
 
-/**************************************************************
-                        CLASS JOGADOR
-**************************************************************/
-class Jogador{
-public:
-    Jogador(){
-        points = 0;
-        quantidadeDeDerrotas = 0;
-        quantidadeDeVitorias = 0;
-    }
-protected:
-    string name;
-    int points;
-    int quantidadeDeVitorias;
-    int quantidadeDeDerrotas;
-};
 
 /**************************************************************
                         CLASS HUD
@@ -59,16 +43,30 @@ protected:
 **************************************************************/
 class HUD{
 public:
-    enum Tela { SPLASHSCREEN = 0, MENU = 1, JOGO = 2, VITORIAJOGADOR1 = 3, VITORIAJOGADOR2 = 4, GAMEOVER = 5};
+    enum Tela { SPLASHSCREEN = 0, MENU = 1, MENU_SELECIONA_FASE = 2, MENU_CREDITOS = 3, MENU_SELECIONA_SLIDER = 4, JOGOFASE1 = 5,
+    JOGOFASE2 = 6, JOGOFASE3 = 7, VITORIAJOGADOR1 = 8, VITORIAJOGADOR2 = 9, PAUSE = 10, GAMEOVER = 11};
     HUD(int screenSizeX, int screenSizeY, int screenInitPositionX, int screenInitPositionY, int telaAtual);
+    void inicializaTexturas();
     void mudaTela(Tela novaTela);
-    void showBackground();
+    void showSplashScreen();
+    void showMenu();
+    void showMenuSelecionaFase();
+    void showMenuCreditos();
+    void showMenuSelecionaSlider();
+    void showJogoFase1();
+    void showJogoFase2();
+    void showJogoFase3();
+    void showVitoriaJogador1();
+    void showVitoriaJogador2();
+    void showGameOver();
     int getScreenSizeX();
     int getScreenSizeY();
     int getScreenInitPositionX();
     int getScreenInitPositionY();
     void setTelaAtual(int novaTela);
     int getTelaAtual();
+    void escreveTexto(void * font, char *s, float x, float y, float z);
+    void desenha(int x, int y, GLuint imagem);
 
 protected:
 
@@ -83,6 +81,7 @@ protected:
 **************************************************************/
 class Base{
 public:
+    Base();
     Base(int x, int y, int altura, int largura, float velocidadeX, float velocidadeY);
 
     void setX(int x);
@@ -99,9 +98,10 @@ public:
     int getSIZE_Y();
     float getVelocidadeX();
     float getVelocidadeY();
-    void desenha();
     virtual void testaColisaoComParede(HUD &hud) = 0;
     virtual void testaColisaoComObjeto() = 0;
+    void setImagem(GLuint imagem);
+    GLuint getImagem();
 
 protected:
     int x, y, altura, largura, SIZE_X, SIZE_Y;
@@ -115,23 +115,57 @@ protected:
 **************************************************************/
 class Slider : public Base{
 public:
+    Slider();
+    void testaColisaoComParede(HUD& HUD);
+    void testaColisaoComObjeto();
+protected:
+};
+
+/**************************************************************
+                        CLASS JOGADOR
+**************************************************************/
+class Jogador{
+public:
+    Jogador(){
+        name = "Padrão";
+        points = 0;
+        quantidadeDeDerrotas = 0;
+        quantidadeDeVitorias = 0;
+    }
+
+    void setSlider(Slider slider);
+    Slider getSlider();
+    void setName(string name);
+    string getName();
+    int getPoints();
+    void setQuantidadeDeVitorias(int quant);
+    void setQuantidadeDeDerrotas(int quant);
+    int getQuantidadeDeDerrotas();
+    int getQuantidadeDeVitorias();
 
 protected:
+    string name;
+    int points;
+    int quantidadeDeVitorias;
+    int quantidadeDeDerrotas;
+    Slider slider;
 };
 /**************************************************************
                         CLASS Bola
     Função: Responsavel por controlar a bola no jogo
 **************************************************************/
-class Bola{
+class Bola : public Base{
 public:
-
+    void testaColisaoComParede(HUD& HUD);
+    void testaColisaoComObjeto();
 protected:
+
 };
 /**************************************************************
                         CLASS SpecialItem
     Função: Classe de base para o Slider, Bola e outras coisas
 **************************************************************/
-class SpecialItem{
+class SpecialItem : Base{
 public:
 
 protected:
