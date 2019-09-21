@@ -6,7 +6,10 @@
 **************************************************************/
 //Objetos
 HUD hud(1500, 955, 0, 0, 0);
-Jogador player1, player2;
+Jogador player1;
+Jogador player2;
+Slider slider1;
+Slider slider2;
 Bola bola;
 
 //Texturas
@@ -14,6 +17,7 @@ GLuint texSliderPlayer1;
 GLuint texSliderPlayer2;
 GLuint texBola;
 GLuint texBackground;
+GLuint texSplashScreen;
 GLuint texLogo;
 GLuint texMenuSinglePlayer;
 GLuint texMenuMultiplayer;
@@ -26,6 +30,5 @@ int posX, posY;
 int posX2, posY2;
 int posBolaX, posBolaY;
 int velBolaX, velBolaY;
-int flag;
 int keys[256];
 #endif // GLOBALVARIAVEIS_H_INCLUDED

@@ -43,7 +43,7 @@ GLuint carregaTextura(const char* arquivo);
 **************************************************************/
 class HUD{
 public:
-    enum Tela { SPLASHSCREEN = 0, MENU = 1, MENU_SELECIONA_FASE = 2, MENU_CREDITOS = 3, MENU_SELECIONA_SLIDER = 4, JOGOFASE1 = 5,
+    enum Tela { SPLASHSCREEN = 0, MENU = 1, MENU_SELECIONA_FASE = 2, MENU_CREDITOS = 3, MENU_OPCOES = 4, JOGOFASE1 = 5,
     JOGOFASE2 = 6, JOGOFASE3 = 7, VITORIAJOGADOR1 = 8, VITORIAJOGADOR2 = 9, PAUSE = 10, GAMEOVER = 11};
     HUD(int screenSizeX, int screenSizeY, int screenInitPositionX, int screenInitPositionY, int telaAtual);
     void inicializaTexturas();
@@ -52,12 +52,13 @@ public:
     void showMenu();
     void showMenuSelecionaFase();
     void showMenuCreditos();
-    void showMenuSelecionaSlider();
+    void showMenuOpcoes();
     void showJogoFase1();
     void showJogoFase2();
     void showJogoFase3();
     void showVitoriaJogador1();
     void showVitoriaJogador2();
+    void showPause();
     void showGameOver();
     int getScreenSizeX();
     int getScreenSizeY();
@@ -66,8 +67,6 @@ public:
     void setTelaAtual(int novaTela);
     int getTelaAtual();
     void escreveTexto(void * font, char *s, float x, float y, float z);
-    void desenha(int x, int y, GLuint imagem);
-
 protected:
 
     int telaAtual;
@@ -94,19 +93,14 @@ public:
     int getY();
     int getAltura();
     int getLargura();
-    int getSIZE_X();
-    int getSIZE_Y();
     float getVelocidadeX();
     float getVelocidadeY();
-    virtual void testaColisaoComParede(HUD &hud) = 0;
-    virtual void testaColisaoComObjeto() = 0;
-    void setImagem(GLuint imagem);
-    GLuint getImagem();
+    virtual void testaColisaoComParede() = 0;
+    virtual void testaColisaoComObjeto(int xObj, int yObj, int larguraObj, int alturaObj) = 0;
 
 protected:
-    int x, y, altura, largura, SIZE_X, SIZE_Y;
+    int x, y, altura, largura;
     float velocidadeX, velocidadeY;
-    GLuint imagem;
 };
 
 /**************************************************************
@@ -115,9 +109,8 @@ protected:
 **************************************************************/
 class Slider : public Base{
 public:
-    Slider();
-    void testaColisaoComParede(HUD& HUD);
-    void testaColisaoComObjeto();
+    void testaColisaoComParede();
+    void testaColisaoComObjeto(int xObj, int yObj, int larguraObj, int alturaObj);
 protected:
 };
 
@@ -156,8 +149,8 @@ protected:
 **************************************************************/
 class Bola : public Base{
 public:
-    void testaColisaoComParede(HUD& HUD);
-    void testaColisaoComObjeto();
+    void testaColisaoComParede();
+    void testaColisaoComObjeto(int xObj, int yObj, int larguraObj, int alturaObj);
 protected:
 
 };

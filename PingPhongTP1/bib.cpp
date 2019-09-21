@@ -67,9 +67,14 @@ void HUD::mudaTela(Tela novaTela){
     this->telaAtual = novaTela;
 }
 
-void HUD::showSplashScreen()
-{
+void HUD::showSplashScreen(){
+    glEnable(GL_TEXTURE_2D);
 
+    glBindTexture(GL_TEXTURE_2D, texSplashScreen);
+
+    HitBox2(300,100, 800, 800);
+
+    glDisable(GL_TEXTURE_2D);
 }
 
 void HUD::showMenu(){
@@ -109,14 +114,32 @@ void HUD::showMenuCreditos()
 
 }
 
-void HUD::showMenuSelecionaSlider()
+void HUD::showMenuOpcoes()
 {
 
 }
 
-void HUD::showJogoFase1()
-{
+void HUD::showJogoFase1(){
+    // Habilita o uso de texturas
+    glEnable(GL_TEXTURE_2D);
 
+    glBindTexture(GL_TEXTURE_2D, texBackground);
+
+    HitBox2(0, 0, 1500, 955);
+
+    glBindTexture(GL_TEXTURE_2D, texSliderPlayer1);
+
+    HitBox2(slider1.getX(),slider1.getY(),33,127);
+    //cout << player1.getSlider().getX() << " " << player1.getSlider().getY() << endl;
+    glBindTexture(GL_TEXTURE_2D, texSliderPlayer2);
+
+    HitBox2(slider2.getX(), slider2.getY(), 33, 127);
+    //cout << player2.getSlider().getX() << " " << player2.getSlider().getY() << endl;
+    glBindTexture(GL_TEXTURE_2D,texBola);
+
+    HitBox2(bola.getX(),bola.getY(),45, 43);
+
+    glDisable(GL_TEXTURE_2D);
 }
 
 void HUD::showJogoFase2()
@@ -139,6 +162,11 @@ void HUD::showVitoriaJogador2()
 
 }
 
+void HUD::showPause()
+{
+
+}
+
 void HUD::showGameOver()
 {
 
@@ -148,22 +176,18 @@ void HUD::setTelaAtual(int novaTela){
     this->telaAtual = novaTela;
 }
 
-void HUD::desenha(int x, int y, GLuint imagem)
-{
-
-}
-
 void HUD::inicializaTexturas()
 {
     texSliderPlayer1 = carregaTextura("sliderVermelho.png");
     texSliderPlayer2 = carregaTextura("sliderVerde.png");
-    texBola = carregaTextura("bola.png");
+    texBola = carregaTextura("tennisBall1.png");
     texBackground = carregaTextura("quadraTenis.png");
     texLogo = carregaTextura("logo.png");
     texMenuSinglePlayer = carregaTextura("menuSinglePlayer.png");
     texMenuMultiplayer = carregaTextura("menuMultiplayer.png");
     texMenuOpcoes = carregaTextura("menuOpcoes.png");
     texMenuCreditos = carregaTextura("menuCreditos.png");
+    texSplashScreen = carregaTextura("splashScreen.png");
 }
 
 /**************************************************************
@@ -254,6 +278,7 @@ int Base::getX(){
 }
 
 int Base::getY(){
+    //cout << this->y << "\n";
     return this->y;
 }
 
@@ -265,14 +290,6 @@ int Base::getLargura(){
     return this->largura;
 }
 
-int Base::getSIZE_X(){
-    return this->SIZE_X;
-}
-
-int Base::getSIZE_Y(){
-    return this->SIZE_Y;
-}
-
 float Base::getVelocidadeX(){
     return this->velocidadeX;
 }
@@ -281,65 +298,59 @@ float Base::getVelocidadeY(){
     return this->velocidadeY;
 }
 
-void Base::testaColisaoComParede(HUD& hud){
-
-}
-
-void Base::testaColisaoComObjeto(){
-    if ( (this->x + SIZE_X > getX() ) &&
-        ( this->x < getX() + getSIZE_X() ) &&
-        ( this->y + this->SIZE_Y > getY() ) &&
-        ( this->y < getY() + getSIZE_Y() ) )
-        {
-
-        }
-}
-
-void Base::setImagem(GLuint imagem){
-    //cout << ">" << imagem << endl;
-    this->imagem = imagem;
-    //cout << ">>" << imagem << endl;
-    //cout << ">>>" << this->imagem << endl;
-}
-
-GLuint Base::getImagem(){
-    return this->imagem;
-}
-
-
 /**************************************************************
                 CLASS SLIDER (IMPLEMENTACAO)
 **************************************************************/
-Slider::Slider()
-{
+void Slider::testaColisaoComParede(){
+    if (getY() <= 130){
+        setVelocidadeY(11);
+    } else if (getY() + getAltura() >= hud.getScreenSizeY()-200){
+        setVelocidadeY(-11);
+    }
 }
 
-void Slider::testaColisaoComParede(HUD& hud){
-}
-
-void Slider::testaColisaoComObjeto(){
-    if ( (this->x + SIZE_X > getX() ) &&
-        ( this->x < getX() + getSIZE_X() ) &&
-        ( this->y + this->SIZE_Y > getY() ) &&
-        ( this->y < getY() + getSIZE_Y() ) )
+void Slider::testaColisaoComObjeto(int xObj, int yObj, int larguraObj, int alturaObj){
+    if ( (this->x + getLargura() > xObj ) &&
+        ( this->x < xObj + larguraObj ) &&
+        ( this->y + getAltura() > yObj ) &&
+        ( this->y < yObj + alturaObj ) )
         {
-
+            cout << "<< colisão slider \n";
         }
 }
 
 /**************************************************************
                 CLASS BOLA (IMPLEMENTACAO)
 **************************************************************/
-void Bola::testaColisaoComParede(HUD& hud){
+void Bola::testaColisaoComParede(){
+    if (getX() <= 40 || getX() >= hud.getScreenSizeX()-50){
+        //setVelocidadeX(-getVelocidadeX());
+        setVelocidadeX(0);
+        setVelocidadeY(0);
+        setX(750);
+        setY(450);
+        cout << "passei aqui 1" << endl;
+    }
+
+    if (getY() <= 93 || getY() >= hud.getScreenSizeY()-133){
+        setVelocidadeY(-getVelocidadeY());
+        cout << "passei aqui 2" << endl;
+    }
+
 }
 
-void Bola::testaColisaoComObjeto(){
-    if ( (this->x + SIZE_X > getX() ) &&
-        ( this->x < getX() + getSIZE_X() ) &&
-        ( this->y + this->SIZE_Y > getY() ) &&
-        ( this->y < getY() + getSIZE_Y() ) )
+void Bola::testaColisaoComObjeto(int xObj, int yObj, int larguraObj, int alturaObj){
+    if ( (getX() + getLargura() >= xObj ) &&
+        ( getX() <= xObj + larguraObj ) &&
+        ( getY() + getAltura()  >= yObj ) &&
+        ( getY() <= yObj + alturaObj ) )
         {
-
+            //cout << "xBola = " << getX() << " yBola = " << getY() << endl;
+            //cout << "xSlider = " << xObj << " ySlider = " << yObj << endl;
+            //cout << "<< colisão bola com slider \n";
+            cout << "foi aqui" << endl;
+            setVelocidadeX(-getVelocidadeX());
+            setVelocidadeY(-getVelocidadeY());
         }
 }
 
@@ -366,7 +377,7 @@ GLuint carregaTextura(const char* arquivo) {
 void mouse(int button, int state, int x, int y)
 {
 	if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-        if (hud.telaAtual == hud.MENU){
+        if (hud.getTelaAtual() == hud.MENU){
             if ( (x >= 400 && x <= 400+621) && (y >= 400 && y <= 400 + 92) ){
                 hud.setTelaAtual(hud.JOGOFASE1);
             }
@@ -383,9 +394,9 @@ void redimensionar(int width, int height) {
     glOrtho(0, hud.getScreenSizeX(), 0, hud.getScreenSizeY() , -1, 1);
     //glOrtho(-2, 2, -2, 2, -1.0, 1.0);
     float razaoAspectoJanela = ((float)width)/height;
-    cout << hud.getScreenSizeX() << " " << hud.getScreenSizeY() << endl;
+    //cout << hud.getScreenSizeX() << " " << hud.getScreenSizeY() << endl;
     float razaoAspectoMundo = ((float) hud.getScreenSizeX())/hud.getScreenSizeY();
-    // se a janela está menos larga do que o mundo (16:9)...
+    // se a janela está menos larga
     if (razaoAspectoJanela < razaoAspectoMundo) {
         // vamos colocar barras verticais (acima e abaixo)
         float hViewport = width / razaoAspectoMundo;
@@ -415,74 +426,79 @@ void inicializa(){
     hud.inicializaTexturas();
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 
-    hud.setTelaAtual(hud.MENU);
+    hud.setTelaAtual(hud.SPLASHSCREEN);
 
-    incrementoX = 100;
-    incrementoY = 100;
-    posX = 100;
-    posY = 100;
+    player1.setName("Player 1");
+    player2.setName("Player 2");
 
-    incrementoX2 = 100;
-    incrementoY2 = 100;
-    posX2 = 1380;
-    posY2 = 100;
+    bola.setAltura(50);
+    bola.setLargura(50);
+    bola.setX(750);
+    bola.setY(450);
+    bola.setVelocidadeX(0);
+    bola.setVelocidadeY(0);
 
-    velBolaX = 10;
-    velBolaY = 10;
-    posBolaX = 750;
-    posBolaY = 477;
+    slider1.setAltura(33);
+    slider1.setLargura(127);
+    slider1.setX(100);
+    slider1.setY(400);
+    slider1.setVelocidadeX(0);
+    slider1.setVelocidadeY(10);
+
+    slider2.setAltura(33);
+    slider2.setLargura(127);
+    slider2.setX(1380);
+    slider2.setY(400);
+    slider2.setVelocidadeX(0);
+    slider2.setVelocidadeY(10);
+
+    bola.setVelocidadeX(0);
+    bola.setVelocidadeY(0);
+    bola.setX(750);
+    bola.setY(450);
 
 }
 
 void display(){
     glClear(GL_COLOR_BUFFER_BIT);
     glColor3f (1, 1, 1);
-    int telaAtual = hud.getTelaAtual();
 
     switch(hud.getTelaAtual()){
+    case 0:
+        hud.showSplashScreen();
+        break;
     case 1:
         hud.showMenu();
         break;
     case 2:
+        hud.showMenuSelecionaFase();
         break;
     case 3:
+        hud.showMenuCreditos();
         break;
     case 4:
+        hud.showMenuOpcoes();
         break;
     case 5:
-        // Habilita o uso de texturas
-        glEnable(GL_TEXTURE_2D);
-
-        glBindTexture(GL_TEXTURE_2D, texBackground);
-
-        HitBox2(0, 0, 1500, 955);
-
-        glBindTexture(GL_TEXTURE_2D, texSliderPlayer1);
-        // Começa a usar a textura que criamos
-
-        HitBox2(posX,posY,33,127);
-
-        glBindTexture(GL_TEXTURE_2D, texSliderPlayer2);
-
-        HitBox2(posX2, posY2, 33, 127);
-
-        glBindTexture(GL_TEXTURE_2D,texBola);
-
-        HitBox2(posBolaX,posBolaY,45, 43);
-
-        glDisable(GL_TEXTURE_2D);
+        hud.showJogoFase1();
         break;
     case 6:
+        hud.showJogoFase2();
         break;
     case 7:
+        hud.showJogoFase3();
         break;
     case 8:
+        hud.showVitoriaJogador1();
         break;
     case 9:
+        hud.showVitoriaJogador2();
         break;
     case 10:
+        hud.showPause();
         break;
     case 11:
+        hud.showGameOver();
         break;
     default:
         break;
@@ -497,41 +513,69 @@ void keyboard(unsigned char key, int x, int y){
     case 27:
         exit(0);
         break;
-    case 'w':
-        if (posY + 127 >= hud.getScreenSizeY()){
-            incrementoY = 0;
-        } else {
-            incrementoY = 10;
+    case 'c':
+        system("cls");
+        break;
+    case 'r':
+        if (hud.getTelaAtual() == hud.JOGOFASE1 || hud.getTelaAtual() == hud.JOGOFASE2 ||
+            hud.getTelaAtual() == hud.JOGOFASE3){
+                bola.setX(750);
+                bola.setY(450);
         }
-        keys['w'] = 1;
-        flag = 0;
+        break;
+    case 32:
+        if (hud.getTelaAtual() == hud.SPLASHSCREEN){
+            hud.setTelaAtual(hud.MENU);
+        } else if (hud.getTelaAtual() == hud.JOGOFASE1 || hud.getTelaAtual() == hud.JOGOFASE2 ||
+                   hud.getTelaAtual() == hud.JOGOFASE3){
+                    bola.setVelocidadeX(rand() % 2 == 0 ? -5 : 5);
+                    bola.setVelocidadeY(rand() % 2 == 0 ? -5 : 5);
+                   }
+
+        break;
+    case 'w':
+        if (hud.getTelaAtual() == 5 || hud.getTelaAtual() == 6 || hud.getTelaAtual() == 7){
+            if (slider1.getY() + slider1.getAltura() >= hud.getScreenSizeY()){
+                slider1.setVelocidadeY(0);
+            } else {
+                slider1.setVelocidadeY(10);
+            }
+            keys['w'] = 1;
+        }
+
         break;
     case 's':
-        if (posY <= 0){
-            incrementoY = 0;
-        } else {
-            incrementoY = -10;
+        if (hud.getTelaAtual() == 5 || hud.getTelaAtual() == 6 || hud.getTelaAtual() == 7){
+            if (slider1.getY() <= 0){
+                slider1.setVelocidadeY(10);
+            } else {
+                slider1.setVelocidadeY(-10);
+            }bola.setVelocidadeY(-bola.getVelocidadeY());
+            keys['s'] = 1;
         }
-        keys['s'] = 1;
-        flag = 0;
+
         break;
     case 'y':
-        if (posY2 + 127 >= hud.getScreenSizeY()){
-            incrementoY2 = 0;
-        } else {
-            incrementoY2 = 10;
+        if (hud.getTelaAtual() == 5 || hud.getTelaAtual() == 6 || hud.getTelaAtual() == 7){
+            if (slider2.getY() + slider2.getAltura() >= hud.getScreenSizeY()){
+                slider2.setVelocidadeY(0);
+            } else {
+                slider2.setVelocidadeY(10);
+            }
+            keys['y'] = 1;
         }
-        keys['y'] = 1;
-        flag = 0;
+
         break;
     case 'h':
-        if (posY2 <= 0){
-            incrementoY2 = 0;
-        } else {
-            incrementoY2 = -10;
+        if (hud.getTelaAtual() == 5 || hud.getTelaAtual() == 6 || hud.getTelaAtual() == 7){
+            if (slider2.getY() <= 0){
+                slider2.setVelocidadeY(0);
+            } else {
+                slider2.setVelocidadeY(-10);
+            }
+            keys['h'] = 1;
         }
-        keys['h'] = 1;
-        flag = 0;
+
         break;
     default:
         break;
@@ -547,40 +591,36 @@ void keyboardUp(unsigned char key, int x, int y){
         exit(0);
         break;
     case 'w':
-        if (posY + 127 >= hud.getScreenSizeY()){
-            incrementoY = 0;
+        if (slider1.getY() + slider1.getAltura() >= hud.getScreenSizeY()){
+            slider1.setVelocidadeY(0);
         } else {
-            incrementoY = 10;
+            slider1.setVelocidadeY(10);
         }
         keys['w'] = 0;
-        flag = 0;
         break;
     case 's':
-        if (posY <= 0){
-            incrementoY = 0;
+        if (slider1.getY() <= 0){
+            slider1.setVelocidadeY(0);
         } else {
-            incrementoY = -10;
+            slider1.setVelocidadeY(-10);
         }
         keys['s'] = 0;
-        flag = 0;
         break;
     case 'y':
-        if (posY2 + 127 >= hud.getScreenSizeY()){
-            incrementoY2 = 0;
+        if (slider2.getY() + slider2.getAltura() >= hud.getScreenSizeY()){
+            slider2.setVelocidadeY(0);
         } else {
-            incrementoY2 = 10;
+            slider2.setVelocidadeY(10);
         }
         keys['y'] = 0;
-        flag = 0;
         break;
     case 'h':
-        if (posY2 <= 0){
-            incrementoY2 = 0;
+        if (slider2.getY() <= 0){
+            slider2.setVelocidadeY(0);
         } else {
-            incrementoY2 = -10;
+            slider2.setVelocidadeY(-10);
         }
         keys['h'] = 0;
-        flag = 0;
         break;
     default:
         break;
@@ -590,50 +630,32 @@ void keyboardUp(unsigned char key, int x, int y){
 }
 
 void atualizaCena(int periodo){
-    if (keys['w'] != 0){
-        posY = posY + incrementoY;
+    if (keys['w'] != 0 || keys['s'] != 0){
+        //cout << player1.getSlider().getY() + player1.getSlider().getVelocidadeY();
+        slider1.setY(slider1.getY() + slider1.getVelocidadeY());
     }
 
-    if (keys['s'] != 0){
-        posY = posY + incrementoY;
+    if (keys['y'] != 0 || keys['h'] != 0){
+        slider2.setY(slider2.getY() + slider2.getVelocidadeY());
     }
 
-    if (keys['a'] != 0){
-        posX = posX + incrementoX;
+    /*
+    if (bola.getX() <= 70 || bola.getX() >= hud.getScreenSizeX()-50){
+        bola.setVelocidadeX(-bola.getVelocidadeX());
     }
 
-    if (keys['d'] != 0){
-        posX2 = posX2 + incrementoX2;
-    }
+    if (bola.getY() <= 93 || bola.getY() >= hud.getScreenSizeY()-133){
+        bola.setVelocidadeY(-bola.getVelocidadeY());
+    }*/
 
-    if (keys['y'] != 0){
-        posY2 = posY2 + incrementoY2;
-    }
-    if (keys['h'] != 0){
-        posY2 = posY2 + incrementoY2;
-    }
+    bola.testaColisaoComParede();
+    slider1.testaColisaoComParede();
+    slider2.testaColisaoComParede();
+    bola.testaColisaoComObjeto(slider1.getX(), slider1.getY(), slider1.getAltura(), slider1.getLargura());
+    bola.testaColisaoComObjeto(slider2.getX(), slider2.getY(), slider2.getAltura(), slider2.getLargura());
 
-    if (keys['j'] != 0){
-        posX2 = posX2 + incrementoX2;
-    }
-
-    if (keys['g'] != 0){
-        posX2 = posX2 + incrementoX2;
-    }
-
-    if (posBolaX <= 140 || posBolaX >= hud.getScreenSizeX()-145){
-        velBolaX = -velBolaX;
-    }
-
-    if (posBolaY <= 93 || posBolaY >= hud.getScreenSizeY()-133){
-        velBolaY = -velBolaY;
-    }
-
-    posBolaX = posBolaX + velBolaX;
-    posBolaY = posBolaY + velBolaY;
-
-
-
+    bola.setX(bola.getX() + bola.getVelocidadeX());
+    bola.setY(bola.getY() + bola.getVelocidadeY());
 
     glutPostRedisplay();
 
