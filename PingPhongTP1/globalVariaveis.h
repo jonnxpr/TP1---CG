@@ -11,6 +11,7 @@ Jogador player2;
 Slider slider1;
 Slider slider2;
 Bola bola;
+Jogo jogo(3);
 
 //Texturas
 GLuint texSliderPlayer1;
@@ -19,16 +20,32 @@ GLuint texBola;
 GLuint texBackground;
 GLuint texSplashScreen;
 GLuint texLogo;
-GLuint texMenuSinglePlayer;
+//GLuint texMenuSinglePlayer;
 GLuint texMenuMultiplayer;
 GLuint texMenuOpcoes;
 GLuint texMenuCreditos;
+GLuint texTextPontos;
+GLuint texTextSet;
+GLuint texPonto0;
+GLuint texPonto1;
+GLuint texPonto2;
+GLuint texPonto3;
+GLuint texPonto4;
+GLuint texPonto5;
+GLuint texPonto6;
+GLuint texPonto7;
+GLuint texPonto8;
+GLuint texPonto9;
+GLuint texPonto10;
+GLuint texPonto11;
+GLuint texCoroa;
+GLuint texVitoriaP1;
+GLuint texVitoriaP2;
+GLuint texOpcoes;
 
-int incrementoX, incrementoY;
-int incrementoX2, incrementoY2;
-int posX, posY;
-int posX2, posY2;
-int posBolaX, posBolaY;
-int velBolaX, velBolaY;
+//variavel de controle do teclado
 int keys[256];
+
+//variavel de controle do pause
+bool pause;
 #endif // GLOBALVARIAVEIS_H_INCLUDED

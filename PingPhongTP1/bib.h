@@ -7,6 +7,8 @@
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 #include <SOIL/SOIL.h>
+#include "SDL/SDL.h"
+#include "SDL/SDL_mixer.h"
 
 #define SCREENSIZEX 800
 #define SCREENSIZEY 800
@@ -35,6 +37,7 @@ void keyboardUp(unsigned char key, int x, int y);
 void atualizaCena(int periodo);
 void mouse(int button, int state, int x, int y);
 GLuint carregaTextura(const char* arquivo);
+void reiniciaJogo();
 
 
 /**************************************************************
@@ -43,23 +46,22 @@ GLuint carregaTextura(const char* arquivo);
 **************************************************************/
 class HUD{
 public:
-    enum Tela { SPLASHSCREEN = 0, MENU = 1, MENU_SELECIONA_FASE = 2, MENU_CREDITOS = 3, MENU_OPCOES = 4, JOGOFASE1 = 5,
-    JOGOFASE2 = 6, JOGOFASE3 = 7, VITORIAJOGADOR1 = 8, VITORIAJOGADOR2 = 9, PAUSE = 10, GAMEOVER = 11};
+    enum Tela { SPLASHSCREEN = 0, MENU = 1, MENU_CREDITOS = 2, MENU_OPCOES = 3, JOGOFASE1 = 4,
+    JOGOFASE2 = 5, JOGOFASE3 = 6, JOGOFASE4 = 7, VITORIAJOGADOR1 = 8, VITORIAJOGADOR2 = 9, PAUSE = 10};
     HUD(int screenSizeX, int screenSizeY, int screenInitPositionX, int screenInitPositionY, int telaAtual);
     void inicializaTexturas();
     void mudaTela(Tela novaTela);
     void showSplashScreen();
     void showMenu();
-    void showMenuSelecionaFase();
     void showMenuCreditos();
     void showMenuOpcoes();
     void showJogoFase1();
     void showJogoFase2();
     void showJogoFase3();
+    void showJogoFase4();
     void showVitoriaJogador1();
     void showVitoriaJogador2();
     void showPause();
-    void showGameOver();
     int getScreenSizeX();
     int getScreenSizeY();
     int getScreenInitPositionX();
@@ -126,10 +128,9 @@ public:
         quantidadeDeVitorias = 0;
     }
 
-    void setSlider(Slider slider);
-    Slider getSlider();
     void setName(string name);
     string getName();
+    void setPoints(int points);
     int getPoints();
     void setQuantidadeDeVitorias(int quant);
     void setQuantidadeDeDerrotas(int quant);
@@ -141,7 +142,45 @@ protected:
     int points;
     int quantidadeDeVitorias;
     int quantidadeDeDerrotas;
-    Slider slider;
+};
+
+/**************************************************************
+                          CLASS JOGO
+**************************************************************/
+class Jogo{
+public:
+    Jogo(int maxSets);
+    void setPlayer1Points(int points);
+    void setPlayer2Points(int points);
+    void setSetAtual(int setAtual);
+    void setMaxSets(int maxSets);
+    void setSetsPlayer1(int sets);
+    void setSetsPlayer2(int sets);
+    void setTiePointsP1(int tiePoint);
+    void setTiePointsP2(int tiePoint);
+    void setTie(bool tie);
+    void setGameWasTied(bool value);
+    int getPlayer1Points();
+    int getPlayer2Points();
+    int getSetAtual();
+    int getMaxSets();
+    int getSetsPlayer1();
+    int getSetsPlayer2();
+    int getTiePointsP1();
+    int getTiePointsP2();
+    bool getGameWasTied();
+    bool getTie();
+    void verificaSet();
+    int isPlayer1Ganhando();
+    void isGameTied();
+
+
+protected:
+    int player1Points, player2Points;
+    int setsPlayer1, setsPlayer2;
+    int setAtual, maxSets;
+    bool tie, gameWasTied;
+    int tiePointsP1, tiePointsP2;
 };
 /**************************************************************
                         CLASS Bola
