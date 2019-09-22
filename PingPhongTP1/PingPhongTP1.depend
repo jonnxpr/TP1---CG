@@ -226,7 +226,7 @@
 	<stddef.h>
 	<GL/gl.h>
 
-1569126275 d:\material cefet\computacaografica\tps\tp1\tp1 - cg\pingphongtp1\bib.h
+1569138072 d:\material cefet\computacaografica\tps\tp1\tp1 - cg\pingphongtp1\bib.h
 	<iostream>
 	<cmath>
 	<cstdlib>
@@ -262,13 +262,13 @@
 
 1215465208 c:\program files (x86)\codeblocks\mingw\include\soil\soil.h
 
-1569132432 source:d:\material cefet\computacaografica\tps\tp1\tp1 - cg\pingphongtp1\bib.cpp
+1569139346 source:d:\material cefet\computacaografica\tps\tp1\tp1 - cg\pingphongtp1\bib.cpp
 	"bib.h"
 	"globalVariaveis.h"
 
 1301111164 c:\program files (x86)\codeblocks\mingw\include\gl.h
 
-1569129869 d:\material cefet\computacaografica\tps\tp1\tp1 - cg\pingphongtp1\globalvariaveis.h
+1569137600 d:\material cefet\computacaografica\tps\tp1\tp1 - cg\pingphongtp1\globalvariaveis.h
 	"bib.h"
 
 1325735040 c:\program files (x86)\codeblocks\mingw\include\sdl\sdl.h

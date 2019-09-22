@@ -47,7 +47,7 @@ void reiniciaJogo();
 class HUD{
 public:
     enum Tela { SPLASHSCREEN = 0, MENU = 1, MENU_CREDITOS = 2, MENU_OPCOES = 3, JOGOFASE1 = 4,
-    JOGOFASE2 = 5, JOGOFASE3 = 6, JOGOFASE4 = 7, VITORIAJOGADOR1 = 8, VITORIAJOGADOR2 = 9, PAUSE = 10};
+    JOGOFASE2 = 5, JOGOFASE3 = 6, JOGOFASE4 = 7, VITORIAJOGADOR1 = 8, VITORIAJOGADOR2 = 9, PAUSE = 10, TELA_SAIDA = 11};
     HUD(int screenSizeX, int screenSizeY, int screenInitPositionX, int screenInitPositionY, int telaAtual);
     void inicializaTexturas();
     void mudaTela(Tela novaTela);

@@ -53,6 +53,22 @@ void parar_musica()
     Mix_HaltChannel(-1);
 }
 
+void ativaSom(){
+    som = true;
+}
+
+void desativaSom(){
+    som = false;
+}
+
+void pausar(){
+    pause = true;
+}
+
+void despausar(){
+    pause = false;
+}
+
 /**************************************************************
                 CLASS HUD (IMPLEMENTACAO)
 **************************************************************/
@@ -134,6 +150,12 @@ void HUD::showMenu(){
 }
 
 void HUD::showMenuCreditos(){
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, texCreditos);
+
+    HitBox2(250,100, 1000, 1000);
+
+    glDisable(GL_TEXTURE_2D);
     //cout << "menu creditos\n";
 }
 
@@ -311,9 +333,11 @@ void HUD::showJogoFase1(){
     }
 
     if (jogo.getPlayer1Points() == 10){
-
+        glBindTexture(GL_TEXTURE_2D, texMatchPoint);
+        HitBox2(430, 875, 70, 100);
     } else if (jogo.getPlayer2Points() == 10){
-
+        glBindTexture(GL_TEXTURE_2D, texMatchPoint);
+        HitBox2(1380, 875, 70, 100);
     }
 
     glDisable(GL_TEXTURE_2D);
@@ -359,10 +383,61 @@ void HUD::setTelaAtual(int novaTela){
     this->telaAtual = novaTela;
 }
 
+void getTexturaP1(){
+
+    switch(sliderP1){
+    case 1:
+        texSliderPlayer1 = carregaTextura("sliderAmarelo.png");
+        break;
+    case 2:
+        texSliderPlayer1 = carregaTextura("sliderBranco.png");
+        break;
+    case 3:
+        texSliderPlayer1 = carregaTextura("sliderCinza.png");
+        break;
+    case 4:
+        texSliderPlayer1 = carregaTextura("sliderVerde.png");
+        break;
+    case 5:
+        texSliderPlayer1 = carregaTextura("sliderVermelho.png");
+        break;
+    default:
+        texSliderPlayer1 = carregaTextura("sliderVermelho.png");
+        break;
+    }
+}
+
+void getTexturaP2(){
+
+    switch(sliderP2){
+    case 1:
+        texSliderPlayer2 = carregaTextura("sliderAmarelo.png");
+        break;
+    case 2:
+        texSliderPlayer2 = carregaTextura("sliderBranco.png");
+        break;
+    case 3:
+        texSliderPlayer2 = carregaTextura("sliderCinza.png");
+        break;
+    case 4:
+        texSliderPlayer2 = carregaTextura("sliderVerde.png");
+        break;
+    case 5:
+        texSliderPlayer2 = carregaTextura("sliderVermelho.png");
+        break;
+    default:
+        texSliderPlayer2 = carregaTextura("sliderVermelho.png");
+        break;
+    }
+}
+
 void HUD::inicializaTexturas()
 {
-    texSliderPlayer1 = carregaTextura("sliderVermelho.png");
-    texSliderPlayer2 = carregaTextura("sliderVerde.png");
+
+    getTexturaP1();
+    getTexturaP2();
+    //texSliderPlayer1 = carregaTextura("sliderVermelho.png");
+    //texSliderPlayer2 = carregaTextura("sliderVerde.png");
     texBola = carregaTextura("tennisBall1.png");
     texBackground = carregaTextura("quadraTenis.png");
     texLogo = carregaTextura("logo.png");
@@ -389,6 +464,8 @@ void HUD::inicializaTexturas()
     texVitoriaP1 = carregaTextura("player1Win.png");
     texVitoriaP2 = carregaTextura("player2Win.png");
     texOpcoes = carregaTextura("opcoes.png");
+    texCreditos = carregaTextura("creditos.png");
+    texMatchPoint = carregaTextura("matchPoint.png");
 }
 
 /**************************************************************
@@ -560,11 +637,13 @@ void Jogo::verificaSet(){
     if (getSetsPlayer1() == limite){
         reiniciaJogo();
         hud.setTelaAtual(hud.VITORIAJOGADOR1);
+        tocar_musica("eyeOfTheTiger.ogg", 0);
     }
 
     if (getSetsPlayer2() == limite){
         reiniciaJogo();
         hud.setTelaAtual(hud.VITORIAJOGADOR2);
+        tocar_musica("eyeOfTheTiger.ogg", 0);
     }
 
     if (getPlayer1Points() == 11 && getPlayer2Points() != 11){
@@ -705,7 +784,11 @@ void Bola::testaColisaoComParede(){
         setY(450);
         player2.setPoints(player2.getPoints()+1);
         jogo.setPlayer2Points(player2.getPoints());
-        tocar_musica("big_explosion.ogg", 0);
+        if (som == true){
+            tocar_musica("big_explosion.ogg", 0);
+        } else {
+            parar_musica();
+        }
         //cout << "passei aqui 1" << endl;
     }
 
@@ -716,15 +799,23 @@ void Bola::testaColisaoComParede(){
         setY(450);
         player1.setPoints(player1.getPoints()+1);
         jogo.setPlayer1Points(player1.getPoints());
-        tocar_musica("big_explosion.ogg", 0);
+        if (som == true){
+            tocar_musica("big_explosion.ogg", 0);
+        } else {
+            parar_musica();
+        }
     }
 
     if (getY() <= 93 || getY() >= hud.getScreenSizeY()-133){
         setVelocidadeY(-getVelocidadeY());
-        tocar_musica("boom.wav",-1);
+        if (som == true){
+            tocar_musica("boom.wav",0);
+        } else {
+            parar_musica();
+        }
+
         //cout << "passei aqui 2" << endl;
     }
-
 }
 
 void Bola::testaColisaoComObjeto(int xObj, int yObj, int larguraObj, int alturaObj){
@@ -738,7 +829,11 @@ void Bola::testaColisaoComObjeto(int xObj, int yObj, int larguraObj, int alturaO
             //cout << "<< colisão bola com slider \n";
             //cout << "foi aqui" << endl;
             setVelocidadeX(-getVelocidadeX());
-            tocar_musica("boom.wav",-1);
+            if (som == true){
+                tocar_musica("boom.wav",0);
+            } else {
+                parar_musica();
+            }
             //setVelocidadeY(-getVelocidadeY());
         }
 }
@@ -768,26 +863,27 @@ void mouse(int button, int state, int x, int y)
 	if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
         if (hud.getTelaAtual() == hud.MENU){
             if ( (x >= 426 && x <= 876) && (y >= 387 && y <= 420) ){
-                hud.setTelaAtual(hud.JOGOFASE1);
+                switch(mapa){
+                case 1:
+                    hud.setTelaAtual(hud.JOGOFASE1);
+                    break;
+                case 2:
+                    hud.setTelaAtual(hud.JOGOFASE2);
+                    break;
+                case 3:
+                    hud.setTelaAtual(hud.JOGOFASE3);
+                    break;
+                case 4:
+                    hud.setTelaAtual(hud.JOGOFASE4);
+                    break;
+                default:
+                    break;
+                }
+
             } else if ( (x >= 578 && x <= 733) && (y >= 467 && y <= 497) ){
                 hud.setTelaAtual(hud.MENU_OPCOES);
             } else if ( (x >= 548 && x <= 754) && (y >= 542 && y <= 572)){
                 hud.setTelaAtual(hud.MENU_CREDITOS);
-            }
-        }
-
-        if (hud.getTelaAtual() == hud.MENU_OPCOES){
-            cout.flush();
-            cout << "x = " << x << " y = " << y << endl;
-            if ( (x >= 358 && x <= 455) && (y >= 152 && y <= 175) ){
-
-            } else if ( (x >= 578 && x <= 733) && (y >= 467 && y <= 497) ){
-
-            } else if ( (x >= 548 && x <= 754) && (y >= 542 && y <= 572)){
-
-            } else if ( (x >= 548 && x <= 754) && (y >= 542 && y <= 572)){
-
-            } else if ( (x >= 548 && x <= 754) && (y >= 542 && y <= 572)){
             }
         }
 	}
@@ -866,6 +962,13 @@ void inicializa(){
     bola.setVelocidadeY(0);
     bola.setX(750);
     bola.setY(450);
+
+    sliderP1 = 1;
+    sliderP2 = 2;
+    mapa = 1;
+
+    som = true;
+    pause = false;
 }
 
 void display(){
@@ -925,20 +1028,78 @@ void keyboard(unsigned char key, int x, int y){
     case 'r':
         reiniciaJogo();
         break;
+    case 'x':
+        if (hud.getTelaAtual() == hud.JOGOFASE1 || hud.getTelaAtual() == hud.JOGOFASE2 ||
+            hud.getTelaAtual() == hud.JOGOFASE3 || hud.getTelaAtual() == hud.JOGOFASE4){
+            hud.setTelaAtual(hud.MENU);
+        }
+        break;
     case 32:
         if (hud.getTelaAtual() == hud.SPLASHSCREEN){
             hud.setTelaAtual(hud.MENU);
             parar_musica();
         } else if (hud.getTelaAtual() == hud.JOGOFASE1 || hud.getTelaAtual() == hud.JOGOFASE2 ||
-            hud.getTelaAtual() == hud.JOGOFASE3){
+            hud.getTelaAtual() == hud.JOGOFASE3 || hud.getTelaAtual() == hud.JOGOFASE4){
             bola.setVelocidadeX(10);
             bola.setVelocidadeY(rand() % 2 == 0 ? -10 : 10);
         } else if (hud.getTelaAtual() == hud.VITORIAJOGADOR1 || hud.getTelaAtual() == hud.VITORIAJOGADOR2){
             hud.setTelaAtual(hud.MENU);
+            parar_musica();
         } else if (hud.getTelaAtual() == hud.MENU_OPCOES || hud.getTelaAtual() == hud.MENU_CREDITOS){
             hud.setTelaAtual(hud.MENU);
+            parar_musica();
         }
         break;
+    case 'h':
+        if (hud.getTelaAtual() == hud.MENU_OPCOES){
+            if (sliderP1 > 5){
+                sliderP1 = 1;
+            } else {
+                sliderP1++;
+            }
+        }
+        hud.inicializaTexturas();
+        break;
+    case 'j':
+        if (hud.getTelaAtual() == hud.MENU_OPCOES){
+            if (sliderP2 > 5){
+                sliderP2 = 1;
+            } else {
+                sliderP2++;
+            }
+        }
+        hud.inicializaTexturas();
+        break;
+    case 'g':
+        if (som == true){
+            desativaSom();
+        } else {
+            ativaSom();
+        }
+        //cout << som << endl;
+        break;
+    case 'p':
+        if (hud.getTelaAtual() == hud.JOGOFASE1 || hud.getTelaAtual() == hud.JOGOFASE2 ||
+            hud.getTelaAtual() == hud.JOGOFASE3 || hud.getTelaAtual() == hud.JOGOFASE4){
+            if (pause == true){
+                despausar();
+                bola.setVelocidadeX(10);
+                bola.setVelocidadeY(10);
+            } else {
+                pausar();
+            }
+        }
+        break;
+    case 'k':
+        if (hud.getTelaAtual() == hud.MENU_OPCOES){
+            if (mapa > 4){
+                mapa = 1;
+            } else {
+                mapa++;
+            }
+        }
+        break;
+
     case 'w':
         if (hud.getTelaAtual() == 4 || hud.getTelaAtual() == 5 || hud.getTelaAtual() == 6 || hud.getTelaAtual() == 7){
             if (slider1.getY() + slider1.getAltura() >= hud.getScreenSizeY()){
@@ -1035,14 +1196,26 @@ void keyboardUp(unsigned char key, int x, int y){
 }
 
 void atualizaCena(int periodo){
-    if (keys['w'] != 0 || keys['s'] != 0){
-        //cout << player1.getSlider().getY() + player1.getSlider().getVelocidadeY();
-        slider1.setY(slider1.getY() + slider1.getVelocidadeY());
+    if (pause == false){
+        if (keys['w'] != 0 || keys['s'] != 0){
+            //cout << player1.getSlider().getY() + player1.getSlider().getVelocidadeY();
+            slider1.setY(slider1.getY() + slider1.getVelocidadeY());
+        }
+
+        if (keys['o'] != 0 || keys['l'] != 0){
+            slider2.setY(slider2.getY() + slider2.getVelocidadeY());
+        }
+    } else {
+        if (keys['w'] != 0 || keys['s'] != 0){
+            //cout << player1.getSlider().getY() + player1.getSlider().getVelocidadeY();
+            slider1.setY(slider1.getY() + 0);
+        }
+
+        if (keys['o'] != 0 || keys['l'] != 0){
+            slider2.setY(slider2.getY() + 0);
+        }
     }
 
-    if (keys['o'] != 0 || keys['l'] != 0){
-        slider2.setY(slider2.getY() + slider2.getVelocidadeY());
-    }
 
     /*
     if (bola.getX() <= 70 || bola.getX() >= hud.getScreenSizeX()-50){
@@ -1059,10 +1232,18 @@ void atualizaCena(int periodo){
     bola.testaColisaoComObjeto(slider1.getX(), slider1.getY(), slider1.getAltura(), slider1.getLargura());
     bola.testaColisaoComObjeto(slider2.getX(), slider2.getY(), slider2.getAltura(), slider2.getLargura());
 
-    bola.setVelocidadeX(bola.getVelocidadeX() + 0.0001);
-    bola.setVelocidadeY(bola.getVelocidadeY() + 0.0001);
-    bola.setX(bola.getX() + bola.getVelocidadeX());
-    bola.setY(bola.getY() + bola.getVelocidadeY());
+    if (pause == false){
+        bola.setVelocidadeX(bola.getVelocidadeX() + 0.0001);
+        bola.setVelocidadeY(bola.getVelocidadeY() + 0.0001);
+        bola.setX(bola.getX() + bola.getVelocidadeX());
+        bola.setY(bola.getY() + bola.getVelocidadeY());
+    } else {
+        bola.setVelocidadeX(0);
+        bola.setVelocidadeY(0);
+        bola.setX(bola.getX() + bola.getVelocidadeX());
+        bola.setY(bola.getY() + bola.getVelocidadeY());
+    }
+
 
     jogo.verificaSet();
 

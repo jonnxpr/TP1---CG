@@ -42,10 +42,19 @@ GLuint texCoroa;
 GLuint texVitoriaP1;
 GLuint texVitoriaP2;
 GLuint texOpcoes;
+GLuint texCreditos;
+GLuint texMatchPoint;
 
 //variavel de controle do teclado
 int keys[256];
 
 //variavel de controle do pause
 bool pause;
+
+//variavel de controle do som
+bool som;
+
+//variaveis para controle do mapa escolhido e dos sliders
+int sliderP1, sliderP2;
+int mapa;
 #endif // GLOBALVARIAVEIS_H_INCLUDED
