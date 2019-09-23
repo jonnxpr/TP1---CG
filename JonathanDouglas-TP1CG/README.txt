@@ -90,3 +90,10 @@ Tecla w, o -> Controlam o movimento para cima do slider do
 
 Tecla s, l -> Controlam o movimento para baixo do slider do
               Player 1 e 2, respectivamente
+			  
+*******************************************
+	  Distribuição do código fonte
+*******************************************
+O código fonte está disponível no link:
+
+github.com/jonnxpr
