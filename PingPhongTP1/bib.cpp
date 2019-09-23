@@ -166,6 +166,23 @@ void HUD::showMenuOpcoes(){
     HitBox2(300,100, 800, 800);
 
     glDisable(GL_TEXTURE_2D);
+
+    glColor3f(1, 0, 0);
+    char bufferMapa[10];
+    char bufferSlider1[10];
+    char bufferSlider2[10];
+
+    itoa(mapa, bufferMapa, 10);
+    itoa(sliderP1, bufferSlider1, 10);
+    itoa(sliderP2, bufferSlider2, 10);
+
+    escreveTexto(GLUT_BITMAP_HELVETICA_12, "Mapa:", 400, 150, 0);
+    escreveTexto(GLUT_BITMAP_HELVETICA_12, "Slider1:", 400, 100, 0);
+    escreveTexto(GLUT_BITMAP_HELVETICA_12, "Slider2:", 400, 50, 0);
+    escreveTexto(GLUT_BITMAP_HELVETICA_12, bufferMapa, 480, 150, 0);
+    escreveTexto(GLUT_BITMAP_HELVETICA_12, bufferSlider1, 480, 100, 0);
+    escreveTexto(GLUT_BITMAP_HELVETICA_12, bufferSlider2, 480, 50, 0);
+    glColor3f(0,0,0);
     //cout << "menu opcoes\n";
 }
 
@@ -173,26 +190,41 @@ void HUD::showJogoFase1(){
     // Habilita o uso de texturas
     glEnable(GL_TEXTURE_2D);
 
+    //Desenha background do jogo
     glBindTexture(GL_TEXTURE_2D, texBackground);
 
-    HitBox2(0, 0, 1500, 955);
+    HitBox2(0, 0, hud.getScreenSizeX(), hud.getScreenSizeY());
 
+    //verifica se tem que mostrar o pause
+    if (pause){
+        glBindTexture(GL_TEXTURE_2D, texPausa);
+        HitBox2(750, 400, 400, 200);
+    }
+
+    //Desenha os sliders do jogo
     glBindTexture(GL_TEXTURE_2D, texSliderPlayer1);
 
-    HitBox2(slider1.getX(),slider1.getY(),33,127);
+    HitBox2(slider1.getX(),slider1.getY(),slider1.getAltura(),slider1.getLargura());
 
     glBindTexture(GL_TEXTURE_2D, texSliderPlayer2);
 
-    HitBox2(slider2.getX(), slider2.getY(), 33, 127);
+    HitBox2(slider2.getX(), slider2.getY(), slider2.getAltura(), slider2.getLargura());
 
+    //Desenha a bola do jogo
     glBindTexture(GL_TEXTURE_2D,texBola);
 
-    HitBox2(bola.getX(),bola.getY(),45, 43);
+    HitBox2(bola.getX(),bola.getY(),bola.getAltura(), bola.getLargura());
 
     glBindTexture(GL_TEXTURE_2D, texTextPontos);
 
     HitBox2(100, 850, 300, 100);
 
+    //Desenha obstaculos do jogo
+    //glBindTexture(GL_TEXTURE_2D, texObstaculo);
+
+    //HitBox2(obstaculo1.getX(), obstaculo1.getY(), obstaculo1.getAltura(), obstaculo1.getLargura());
+
+    //Desenha o texto dos pontos e do set
     glBindTexture(GL_TEXTURE_2D, texTextPontos);
 
     HitBox2(1050, 850, 300, 100);
@@ -201,6 +233,7 @@ void HUD::showJogoFase1(){
 
     HitBox2(525, 870, 300, 100);
 
+    //Verifica pontuação do jogador para escolher qual textura usar
     switch(jogo.getPlayer1Points()){
     case 0:
         glBindTexture(GL_TEXTURE_2D, texPonto0);
@@ -254,6 +287,7 @@ void HUD::showJogoFase1(){
         break;
     }
 
+    //Verifica pontuação do jogador para escolher qual textura usar
     switch(jogo.getPlayer2Points()){
     case 0:
         glBindTexture(GL_TEXTURE_2D, texPonto0);
@@ -306,7 +340,7 @@ void HUD::showJogoFase1(){
     default:
         break;
     }
-
+    //Verifica set atual para escolher qual textura usar
     switch(jogo.getSetAtual()){
     case 1:
         glBindTexture(GL_TEXTURE_2D, texPonto1);
@@ -324,7 +358,11 @@ void HUD::showJogoFase1(){
         break;
     }
 
-    if(jogo.isPlayer1Ganhando() == 0){
+    if(jogo.isPlayer1Ganhando() == 0){HitBox2(slider1.getX(),slider1.getY(),slider1.getAltura(),slider1.getLargura());
+
+    glBindTexture(GL_TEXTURE_2D, texSliderPlayer2);
+
+    HitBox2(slider2.getX(), slider2.getY(), slider2.getAltura(), slider2.getLargura());
         glBindTexture(GL_TEXTURE_2D, texCoroa);
         HitBox2(50,900, 100, 55);
     } else if (jogo.isPlayer1Ganhando() == 1) {
@@ -343,18 +381,605 @@ void HUD::showJogoFase1(){
     glDisable(GL_TEXTURE_2D);
 }
 
-void HUD::showJogoFase2()
-{
+void HUD::showJogoFase2(){
+    // Habilita o uso de texturas
+    glEnable(GL_TEXTURE_2D);
+
+    //Desenha background do jogo
+    glBindTexture(GL_TEXTURE_2D, texBackground);
+
+    HitBox2(0, 0, hud.getScreenSizeX(), hud.getScreenSizeY());
+
+    //Desenha os sliders do jogo
+    glBindTexture(GL_TEXTURE_2D, texSliderPlayer1);
+
+    HitBox2(slider1.getX(),slider1.getY(),slider1.getAltura(),slider1.getLargura());
+
+    glBindTexture(GL_TEXTURE_2D, texSliderPlayer2);
+
+    HitBox2(slider2.getX(), slider2.getY(), slider2.getAltura(), slider2.getLargura());
+
+    //Desenha a bola do jogo
+    glBindTexture(GL_TEXTURE_2D,texBola);
+
+    HitBox2(bola.getX(),bola.getY(),bola.getAltura(), bola.getLargura());
+
+    glBindTexture(GL_TEXTURE_2D, texTextPontos);
+
+    HitBox2(100, 850, 300, 100);
+
+    //Desenha obstaculos do jogo
+
+    glBindTexture(GL_TEXTURE_2D, texObstaculo);
+
+    HitBox2(obstaculo1.getX(), obstaculo1.getY(), obstaculo1.getAltura(), obstaculo1.getLargura());
+
+    glBindTexture(GL_TEXTURE_2D, texObstaculo);
+
+    HitBox2(obstaculo2.getX(), obstaculo2.getY(), obstaculo2.getAltura(), obstaculo2.getLargura());
+
+    //Desenha o texto dos pontos e do set
+    glBindTexture(GL_TEXTURE_2D, texTextPontos);
+
+    HitBox2(1050, 850, 300, 100);
+
+    glBindTexture(GL_TEXTURE_2D, texTextSet);
+
+    HitBox2(525, 870, 300, 100);
+
+    //Verifica pontuação do jogador para escolher qual textura usar
+    switch(jogo.getPlayer1Points()){
+    case 0:
+        glBindTexture(GL_TEXTURE_2D, texPonto0);
+        HitBox2(330, 875, 50, 50);
+        break;
+    case 1:
+        glBindTexture(GL_TEXTURE_2D, texPonto1);
+        HitBox2(330, 875, 50, 50);
+        break;
+    case 2:
+        glBindTexture(GL_TEXTURE_2D, texPonto2);
+        HitBox2(330, 875, 50, 50);
+        break;
+    case 3:
+        glBindTexture(GL_TEXTURE_2D, texPonto3);
+        HitBox2(330, 875, 50, 50);
+        break;
+    case 4:
+        glBindTexture(GL_TEXTURE_2D, texPonto4);
+        HitBox2(330, 875, 50, 50);
+        break;
+    case 5:
+        glBindTexture(GL_TEXTURE_2D, texPonto5);
+        HitBox2(330, 875, 50, 50);
+        break;
+    case 6:
+        glBindTexture(GL_TEXTURE_2D, texPonto6);
+        HitBox2(330, 875, 50, 50);
+        break;
+    case 7:
+        glBindTexture(GL_TEXTURE_2D, texPonto7);
+        HitBox2(330, 875, 50, 50);
+        break;
+    case 8:
+        glBindTexture(GL_TEXTURE_2D, texPonto8);
+        HitBox2(330, 875, 50, 50);
+        break;
+    case 9:
+        glBindTexture(GL_TEXTURE_2D, texPonto9);
+        HitBox2(330, 875, 50, 50);
+        break;
+    case 10:
+        glBindTexture(GL_TEXTURE_2D, texPonto10);
+        HitBox2(330, 875, 50, 50);
+        break;
+    case 11:
+        glBindTexture(GL_TEXTURE_2D, texPonto11);
+        HitBox2(330, 875, 50, 50);
+        break;
+    default:
+        break;
+    }
+
+    //Verifica pontuação do jogador para escolher qual textura usar
+    switch(jogo.getPlayer2Points()){
+    case 0:
+        glBindTexture(GL_TEXTURE_2D, texPonto0);
+        HitBox2(1280, 875, 50, 50);
+        break;
+    case 1:
+        glBindTexture(GL_TEXTURE_2D, texPonto1);
+        HitBox2(1280, 875, 50, 50);
+        break;
+    case 2:
+        glBindTexture(GL_TEXTURE_2D, texPonto2);
+        HitBox2(1280, 875, 50, 50);
+        break;
+    case 3:
+        glBindTexture(GL_TEXTURE_2D, texPonto3);
+        HitBox2(1280, 875, 50, 50);
+        break;
+    case 4:
+        glBindTexture(GL_TEXTURE_2D, texPonto4);
+        HitBox2(1280, 875, 50, 50);
+        break;
+    case 5:
+        glBindTexture(GL_TEXTURE_2D, texPonto5);
+        HitBox2(1280, 875, 50, 50);
+        break;
+    case 6:
+        glBindTexture(GL_TEXTURE_2D, texPonto6);
+        HitBox2(1280, 875, 50, 50);
+        break;
+    case 7:
+        glBindTexture(GL_TEXTURE_2D, texPonto7);
+        HitBox2(1280, 875, 50, 50);
+        break;
+    case 8:
+        glBindTexture(GL_TEXTURE_2D, texPonto8);
+        HitBox2(1280, 875, 50, 50);
+        break;
+    case 9:
+        glBindTexture(GL_TEXTURE_2D, texPonto9);
+        HitBox2(1280, 875, 50, 50);
+        break;
+    case 10:
+        glBindTexture(GL_TEXTURE_2D, texPonto10);
+        HitBox2(1280, 875, 50, 50);
+        break;
+    case 11:
+        glBindTexture(GL_TEXTURE_2D, texPonto11);
+        HitBox2(1280, 875, 50, 50);
+        break;
+    default:
+        break;
+    }
+    //Verifica set atual para escolher qual textura usar
+    switch(jogo.getSetAtual()){
+    case 1:
+        glBindTexture(GL_TEXTURE_2D, texPonto1);
+        HitBox2(725, 900, 50, 50);
+        break;
+    case 2:
+        glBindTexture(GL_TEXTURE_2D, texPonto2);
+        HitBox2(725, 900, 50, 50);
+        break;
+    case 3:
+        glBindTexture(GL_TEXTURE_2D, texPonto3);
+        HitBox2(725, 900, 50, 50);
+        break;
+    default:
+        break;
+    }
+
+    if(jogo.isPlayer1Ganhando() == 0){HitBox2(slider1.getX(),slider1.getY(),slider1.getAltura(),slider1.getLargura());
+
+    glBindTexture(GL_TEXTURE_2D, texSliderPlayer2);
+
+    HitBox2(slider2.getX(), slider2.getY(), slider2.getAltura(), slider2.getLargura());
+        glBindTexture(GL_TEXTURE_2D, texCoroa);
+        HitBox2(50,900, 100, 55);
+    } else if (jogo.isPlayer1Ganhando() == 1) {
+        glBindTexture(GL_TEXTURE_2D, texCoroa);
+        HitBox2(1000,900, 100, 55);
+    }
+
+    if (jogo.getPlayer1Points() == 10){
+        glBindTexture(GL_TEXTURE_2D, texMatchPoint);
+        HitBox2(430, 875, 70, 100);
+    } else if (jogo.getPlayer2Points() == 10){
+        glBindTexture(GL_TEXTURE_2D, texMatchPoint);
+        HitBox2(1380, 875, 70, 100);
+    }
+
+    //verifica se tem que mostrar o pause
+    if (pause){
+        glBindTexture(GL_TEXTURE_2D, texPausa);
+        HitBox2(750, 400, 400, 200);
+    }
+
+    glDisable(GL_TEXTURE_2D);
+}
+
+void HUD::showJogoFase3(){
+    // Habilita o uso de texturas
+    glEnable(GL_TEXTURE_2D);
+
+    //Desenha background do jogo
+    glBindTexture(GL_TEXTURE_2D, texBackground);
+
+    HitBox2(0, 0, hud.getScreenSizeX(), hud.getScreenSizeY());
+
+    //Desenha os sliders do jogo
+    glBindTexture(GL_TEXTURE_2D, texSliderPlayer1);
+
+    HitBox2(slider1.getX(),slider1.getY(),slider1.getAltura(),slider1.getLargura());
+
+    glBindTexture(GL_TEXTURE_2D, texSliderPlayer2);
+
+    HitBox2(slider2.getX(), slider2.getY(), slider2.getAltura(), slider2.getLargura());
+
+    //Desenha a bola do jogo
+    glBindTexture(GL_TEXTURE_2D,texBola);
+
+    HitBox2(bola.getX(),bola.getY(),bola.getAltura(), bola.getLargura());
+
+    glBindTexture(GL_TEXTURE_2D, texTextPontos);
+
+    HitBox2(100, 850, 300, 100);
+
+    //Desenha obstaculos do jogo
+
+    glBindTexture(GL_TEXTURE_2D, texObstaculo);
+
+    HitBox2(obstaculo1.getX(), obstaculo1.getY(), obstaculo1.getAltura(), obstaculo1.getLargura());
+
+    glBindTexture(GL_TEXTURE_2D, texObstaculo);
+
+    HitBox2(obstaculo2.getX(), obstaculo2.getY(), obstaculo2.getAltura(), obstaculo2.getLargura());
+
+    //Desenha o texto dos pontos e do set
+    glBindTexture(GL_TEXTURE_2D, texTextPontos);
+
+    HitBox2(1050, 850, 300, 100);
+
+    glBindTexture(GL_TEXTURE_2D, texTextSet);
+
+    HitBox2(525, 870, 300, 100);
+
+    //Verifica pontuação do jogador para escolher qual textura usar
+    switch(jogo.getPlayer1Points()){
+    case 0:
+        glBindTexture(GL_TEXTURE_2D, texPonto0);
+        HitBox2(330, 875, 50, 50);
+        break;
+    case 1:
+        glBindTexture(GL_TEXTURE_2D, texPonto1);
+        HitBox2(330, 875, 50, 50);
+        break;
+    case 2:
+        glBindTexture(GL_TEXTURE_2D, texPonto2);
+        HitBox2(330, 875, 50, 50);
+        break;
+    case 3:
+        glBindTexture(GL_TEXTURE_2D, texPonto3);
+        HitBox2(330, 875, 50, 50);
+        break;
+    case 4:
+        glBindTexture(GL_TEXTURE_2D, texPonto4);
+        HitBox2(330, 875, 50, 50);
+        break;
+    case 5:
+        glBindTexture(GL_TEXTURE_2D, texPonto5);
+        HitBox2(330, 875, 50, 50);
+        break;
+    case 6:
+        glBindTexture(GL_TEXTURE_2D, texPonto6);
+        HitBox2(330, 875, 50, 50);
+        break;
+    case 7:
+        glBindTexture(GL_TEXTURE_2D, texPonto7);
+        HitBox2(330, 875, 50, 50);
+        break;
+    case 8:
+        glBindTexture(GL_TEXTURE_2D, texPonto8);
+        HitBox2(330, 875, 50, 50);
+        break;
+    case 9:
+        glBindTexture(GL_TEXTURE_2D, texPonto9);
+        HitBox2(330, 875, 50, 50);
+        break;
+    case 10:
+        glBindTexture(GL_TEXTURE_2D, texPonto10);
+        HitBox2(330, 875, 50, 50);
+        break;
+    case 11:
+        glBindTexture(GL_TEXTURE_2D, texPonto11);
+        HitBox2(330, 875, 50, 50);
+        break;
+    default:
+        break;
+    }
+
+    //Verifica pontuação do jogador para escolher qual textura usar
+    switch(jogo.getPlayer2Points()){
+    case 0:
+        glBindTexture(GL_TEXTURE_2D, texPonto0);
+        HitBox2(1280, 875, 50, 50);
+        break;
+    case 1:
+        glBindTexture(GL_TEXTURE_2D, texPonto1);
+        HitBox2(1280, 875, 50, 50);
+        break;
+    case 2:
+        glBindTexture(GL_TEXTURE_2D, texPonto2);
+        HitBox2(1280, 875, 50, 50);
+        break;
+    case 3:
+        glBindTexture(GL_TEXTURE_2D, texPonto3);
+        HitBox2(1280, 875, 50, 50);
+        break;
+    case 4:
+        glBindTexture(GL_TEXTURE_2D, texPonto4);
+        HitBox2(1280, 875, 50, 50);
+        break;
+    case 5:
+        glBindTexture(GL_TEXTURE_2D, texPonto5);
+        HitBox2(1280, 875, 50, 50);
+        break;
+    case 6:
+        glBindTexture(GL_TEXTURE_2D, texPonto6);
+        HitBox2(1280, 875, 50, 50);
+        break;
+    case 7:
+        glBindTexture(GL_TEXTURE_2D, texPonto7);
+        HitBox2(1280, 875, 50, 50);
+        break;
+    case 8:
+        glBindTexture(GL_TEXTURE_2D, texPonto8);
+        HitBox2(1280, 875, 50, 50);
+        break;
+    case 9:
+        glBindTexture(GL_TEXTURE_2D, texPonto9);
+        HitBox2(1280, 875, 50, 50);
+        break;
+    case 10:
+        glBindTexture(GL_TEXTURE_2D, texPonto10);
+        HitBox2(1280, 875, 50, 50);
+        break;
+    case 11:
+        glBindTexture(GL_TEXTURE_2D, texPonto11);
+        HitBox2(1280, 875, 50, 50);
+        break;
+    default:
+        break;
+    }
+    //Verifica set atual para escolher qual textura usar
+    switch(jogo.getSetAtual()){
+    case 1:
+        glBindTexture(GL_TEXTURE_2D, texPonto1);
+        HitBox2(725, 900, 50, 50);
+        break;
+    case 2:
+        glBindTexture(GL_TEXTURE_2D, texPonto2);
+        HitBox2(725, 900, 50, 50);
+        break;
+    case 3:
+        glBindTexture(GL_TEXTURE_2D, texPonto3);
+        HitBox2(725, 900, 50, 50);
+        break;
+    default:
+        break;
+    }
+
+    if(jogo.isPlayer1Ganhando() == 0){HitBox2(slider1.getX(),slider1.getY(),slider1.getAltura(),slider1.getLargura());
+
+    glBindTexture(GL_TEXTURE_2D, texSliderPlayer2);
+
+    HitBox2(slider2.getX(), slider2.getY(), slider2.getAltura(), slider2.getLargura());
+        glBindTexture(GL_TEXTURE_2D, texCoroa);
+        HitBox2(50,900, 100, 55);
+    } else if (jogo.isPlayer1Ganhando() == 1) {
+        glBindTexture(GL_TEXTURE_2D, texCoroa);
+        HitBox2(1000,900, 100, 55);
+    }
+
+    if (jogo.getPlayer1Points() == 10){
+        glBindTexture(GL_TEXTURE_2D, texMatchPoint);
+        HitBox2(430, 875, 70, 100);
+    } else if (jogo.getPlayer2Points() == 10){
+        glBindTexture(GL_TEXTURE_2D, texMatchPoint);
+        HitBox2(1380, 875, 70, 100);
+    }
+
+    //verifica se tem que mostrar o pause
+    if (pause){
+        glBindTexture(GL_TEXTURE_2D, texPausa);
+        HitBox2(750, 400, 400, 200);
+    }
+
+    glDisable(GL_TEXTURE_2D);
 
 }
 
-void HUD::showJogoFase3()
-{
+void HUD::showJogoFase4(){
+    // Habilita o uso de texturas
+    glEnable(GL_TEXTURE_2D);
 
-}
+    //Desenha background do jogo
+    glBindTexture(GL_TEXTURE_2D, texBackground);
 
-void HUD::showJogoFase4()
-{
+    HitBox2(0, 0, hud.getScreenSizeX(), hud.getScreenSizeY());
+
+    //Desenha os sliders do jogo
+    glBindTexture(GL_TEXTURE_2D, texSliderPlayer1);
+
+    HitBox2(slider1.getX(),slider1.getY(),slider1.getAltura(),slider1.getLargura());
+
+    glBindTexture(GL_TEXTURE_2D, texSliderPlayer2);
+
+    HitBox2(slider2.getX(), slider2.getY(), slider2.getAltura(), slider2.getLargura());
+
+    //Desenha a bola do jogo
+    glBindTexture(GL_TEXTURE_2D,texBola);
+
+    HitBox2(bola.getX(),bola.getY(),bola.getAltura(), bola.getLargura());
+
+    glBindTexture(GL_TEXTURE_2D, texTextPontos);
+
+    HitBox2(100, 850, 300, 100);
+
+    //Desenha obstaculos do jogo
+
+    glBindTexture(GL_TEXTURE_2D, texObstaculo);
+
+    HitBox2(obstaculo1.getX(), obstaculo1.getY(), obstaculo1.getAltura(), obstaculo1.getLargura());
+
+    glBindTexture(GL_TEXTURE_2D, texObstaculo);
+
+    HitBox2(obstaculo2.getX(), obstaculo2.getY(), obstaculo2.getAltura(), obstaculo2.getLargura());
+
+    //Desenha o texto dos pontos e do set
+    glBindTexture(GL_TEXTURE_2D, texTextPontos);
+
+    HitBox2(1050, 850, 300, 100);
+
+    glBindTexture(GL_TEXTURE_2D, texTextSet);
+
+    HitBox2(525, 870, 300, 100);
+
+    //Verifica pontuação do jogador para escolher qual textura usar
+    switch(jogo.getPlayer1Points()){
+    case 0:
+        glBindTexture(GL_TEXTURE_2D, texPonto0);
+        HitBox2(330, 875, 50, 50);
+        break;
+    case 1:
+        glBindTexture(GL_TEXTURE_2D, texPonto1);
+        HitBox2(330, 875, 50, 50);
+        break;
+    case 2:
+        glBindTexture(GL_TEXTURE_2D, texPonto2);
+        HitBox2(330, 875, 50, 50);
+        break;
+    case 3:
+        glBindTexture(GL_TEXTURE_2D, texPonto3);
+        HitBox2(330, 875, 50, 50);
+        break;
+    case 4:
+        glBindTexture(GL_TEXTURE_2D, texPonto4);
+        HitBox2(330, 875, 50, 50);
+        break;
+    case 5:
+        glBindTexture(GL_TEXTURE_2D, texPonto5);
+        HitBox2(330, 875, 50, 50);
+        break;
+    case 6:
+        glBindTexture(GL_TEXTURE_2D, texPonto6);
+        HitBox2(330, 875, 50, 50);
+        break;
+    case 7:
+        glBindTexture(GL_TEXTURE_2D, texPonto7);
+        HitBox2(330, 875, 50, 50);
+        break;
+    case 8:
+        glBindTexture(GL_TEXTURE_2D, texPonto8);
+        HitBox2(330, 875, 50, 50);
+        break;
+    case 9:
+        glBindTexture(GL_TEXTURE_2D, texPonto9);
+        HitBox2(330, 875, 50, 50);
+        break;
+    case 10:
+        glBindTexture(GL_TEXTURE_2D, texPonto10);
+        HitBox2(330, 875, 50, 50);
+        break;
+    case 11:
+        glBindTexture(GL_TEXTURE_2D, texPonto11);
+        HitBox2(330, 875, 50, 50);
+        break;
+    default:
+        break;
+    }
+
+    //Verifica pontuação do jogador para escolher qual textura usar
+    switch(jogo.getPlayer2Points()){
+    case 0:
+        glBindTexture(GL_TEXTURE_2D, texPonto0);
+        HitBox2(1280, 875, 50, 50);
+        break;
+    case 1:
+        glBindTexture(GL_TEXTURE_2D, texPonto1);
+        HitBox2(1280, 875, 50, 50);
+        break;
+    case 2:
+        glBindTexture(GL_TEXTURE_2D, texPonto2);
+        HitBox2(1280, 875, 50, 50);
+        break;
+    case 3:
+        glBindTexture(GL_TEXTURE_2D, texPonto3);
+        HitBox2(1280, 875, 50, 50);
+        break;
+    case 4:
+        glBindTexture(GL_TEXTURE_2D, texPonto4);
+        HitBox2(1280, 875, 50, 50);
+        break;
+    case 5:
+        glBindTexture(GL_TEXTURE_2D, texPonto5);
+        HitBox2(1280, 875, 50, 50);
+        break;
+    case 6:
+        glBindTexture(GL_TEXTURE_2D, texPonto6);
+        HitBox2(1280, 875, 50, 50);
+        break;
+    case 7:
+        glBindTexture(GL_TEXTURE_2D, texPonto7);
+        HitBox2(1280, 875, 50, 50);
+        break;
+    case 8:
+        glBindTexture(GL_TEXTURE_2D, texPonto8);
+        HitBox2(1280, 875, 50, 50);
+        break;
+    case 9:
+        glBindTexture(GL_TEXTURE_2D, texPonto9);
+        HitBox2(1280, 875, 50, 50);
+        break;
+    case 10:
+        glBindTexture(GL_TEXTURE_2D, texPonto10);
+        HitBox2(1280, 875, 50, 50);
+        break;
+    case 11:
+        glBindTexture(GL_TEXTURE_2D, texPonto11);
+        HitBox2(1280, 875, 50, 50);
+        break;
+    default:
+        break;
+    }
+    //Verifica set atual para escolher qual textura usar
+    switch(jogo.getSetAtual()){
+    case 1:
+        glBindTexture(GL_TEXTURE_2D, texPonto1);
+        HitBox2(725, 900, 50, 50);
+        break;
+    case 2:
+        glBindTexture(GL_TEXTURE_2D, texPonto2);
+        HitBox2(725, 900, 50, 50);
+        break;
+    case 3:
+        glBindTexture(GL_TEXTURE_2D, texPonto3);
+        HitBox2(725, 900, 50, 50);
+        break;
+    default:
+        break;
+    }
+
+    if(jogo.isPlayer1Ganhando() == 0){HitBox2(slider1.getX(),slider1.getY(),slider1.getAltura(),slider1.getLargura());
+
+    glBindTexture(GL_TEXTURE_2D, texSliderPlayer2);
+
+    HitBox2(slider2.getX(), slider2.getY(), slider2.getAltura(), slider2.getLargura());
+        glBindTexture(GL_TEXTURE_2D, texCoroa);
+        HitBox2(50,900, 100, 55);
+    } else if (jogo.isPlayer1Ganhando() == 1) {
+        glBindTexture(GL_TEXTURE_2D, texCoroa);
+        HitBox2(1000,900, 100, 55);
+    }
+
+    if (jogo.getPlayer1Points() == 10){
+        glBindTexture(GL_TEXTURE_2D, texMatchPoint);
+        HitBox2(430, 875, 70, 100);
+    } else if (jogo.getPlayer2Points() == 10){
+        glBindTexture(GL_TEXTURE_2D, texMatchPoint);
+        HitBox2(1380, 875, 70, 100);
+    }
+
+    //verifica se tem que mostrar o pause
+    if (pause){
+        glBindTexture(GL_TEXTURE_2D, texPausa);
+        HitBox2(750, 400, 400, 200);
+    }
+
+    glDisable(GL_TEXTURE_2D);
 
 }
 
@@ -374,9 +999,13 @@ void HUD::showVitoriaJogador2(){
     HitBox2(400,200, 700, 700);
 }
 
-void HUD::showPause()
+void HUD::showTelaSaida()
 {
+    glEnable(GL_TEXTURE_2D);
 
+    glBindTexture(GL_TEXTURE_2D, texSaida);
+
+    HitBox2(200,0, 1000, 1000);
 }
 
 void HUD::setTelaAtual(int novaTela){
@@ -466,6 +1095,9 @@ void HUD::inicializaTexturas()
     texOpcoes = carregaTextura("opcoes.png");
     texCreditos = carregaTextura("creditos.png");
     texMatchPoint = carregaTextura("matchPoint.png");
+    texObstaculo = carregaTextura("brickWallEdited.png");
+    texPausa = carregaTextura("pause.png");
+    texSaida = carregaTextura("sair.png");
 }
 
 /**************************************************************
@@ -596,7 +1228,6 @@ bool Jogo::getTie(){
 bool Jogo::getGameWasTied(){
     return this->gameWasTied;
 }
-
 
 void Jogo::verificaSet(){
     isGameTied();
@@ -863,17 +1494,57 @@ void mouse(int button, int state, int x, int y)
 	if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
         if (hud.getTelaAtual() == hud.MENU){
             if ( (x >= 426 && x <= 876) && (y >= 387 && y <= 420) ){
+
                 switch(mapa){
                 case 1:
                     hud.setTelaAtual(hud.JOGOFASE1);
                     break;
                 case 2:
+                    obstaculo1.setAltura(33);
+                    obstaculo1.setLargura(127);
+                    obstaculo1.setX(500);
+                    obstaculo1.setY(400);
+                    obstaculo1.setVelocidadeX(0);
+                    obstaculo1.setVelocidadeY(0);
+
+                    obstaculo2.setAltura(33);
+                    obstaculo2.setLargura(127);
+                    obstaculo2.setX(1000);
+                    obstaculo2.setY(400);
+                    obstaculo2.setVelocidadeX(0);
+                    obstaculo2.setVelocidadeY(0);
                     hud.setTelaAtual(hud.JOGOFASE2);
                     break;
                 case 3:
+                    obstaculo1.setAltura(33);
+                    obstaculo1.setLargura(127);
+                    obstaculo1.setX(500);
+                    obstaculo1.setY(400);
+                    obstaculo1.setVelocidadeX(0);
+                    obstaculo1.setVelocidadeY(5);
+
+                    obstaculo2.setAltura(33);
+                    obstaculo2.setLargura(127);
+                    obstaculo2.setX(1000);
+                    obstaculo2.setY(400);
+                    obstaculo2.setVelocidadeX(0);
+                    obstaculo2.setVelocidadeY(5);
                     hud.setTelaAtual(hud.JOGOFASE3);
                     break;
                 case 4:
+                    obstaculo1.setAltura(33);
+                    obstaculo1.setLargura(127);
+                    obstaculo1.setX(500);
+                    obstaculo1.setY(400);
+                    obstaculo1.setVelocidadeX(0);
+                    obstaculo1.setVelocidadeY(10);
+
+                    obstaculo2.setAltura(33);
+                    obstaculo2.setLargura(127);
+                    obstaculo2.setX(1000);
+                    obstaculo2.setY(400);
+                    obstaculo2.setVelocidadeX(0);
+                    obstaculo2.setVelocidadeY(10);
                     hud.setTelaAtual(hud.JOGOFASE4);
                     break;
                 default:
@@ -1007,7 +1678,7 @@ void display(){
         hud.showVitoriaJogador2();
         break;
     case 10:
-        hud.showPause();
+        hud.showTelaSaida();
         break;
     default:
         break;
@@ -1019,8 +1690,9 @@ void display(){
 
 void keyboard(unsigned char key, int x, int y){
     switch(key){
-    case 27:
-        exit(0);
+    //Substituição da tecla ESC que estava bugada pela tecla q
+    case 'q':
+        hud.setTelaAtual(hud.TELA_SAIDA);
         break;
     case 'c':
         system("cls");
@@ -1031,6 +1703,7 @@ void keyboard(unsigned char key, int x, int y){
     case 'x':
         if (hud.getTelaAtual() == hud.JOGOFASE1 || hud.getTelaAtual() == hud.JOGOFASE2 ||
             hud.getTelaAtual() == hud.JOGOFASE3 || hud.getTelaAtual() == hud.JOGOFASE4){
+            pausar();
             hud.setTelaAtual(hud.MENU);
         }
         break;
@@ -1040,7 +1713,7 @@ void keyboard(unsigned char key, int x, int y){
             parar_musica();
         } else if (hud.getTelaAtual() == hud.JOGOFASE1 || hud.getTelaAtual() == hud.JOGOFASE2 ||
             hud.getTelaAtual() == hud.JOGOFASE3 || hud.getTelaAtual() == hud.JOGOFASE4){
-            bola.setVelocidadeX(10);
+            bola.setVelocidadeX(rand() % 2 == 0 ? -10 : 10);
             bola.setVelocidadeY(rand() % 2 == 0 ? -10 : 10);
         } else if (hud.getTelaAtual() == hud.VITORIAJOGADOR1 || hud.getTelaAtual() == hud.VITORIAJOGADOR2){
             hud.setTelaAtual(hud.MENU);
@@ -1048,11 +1721,13 @@ void keyboard(unsigned char key, int x, int y){
         } else if (hud.getTelaAtual() == hud.MENU_OPCOES || hud.getTelaAtual() == hud.MENU_CREDITOS){
             hud.setTelaAtual(hud.MENU);
             parar_musica();
+        } else if (hud.getTelaAtual() == hud.TELA_SAIDA){
+            exit(0);
         }
         break;
     case 'h':
         if (hud.getTelaAtual() == hud.MENU_OPCOES){
-            if (sliderP1 > 5){
+            if (sliderP1 > 4){
                 sliderP1 = 1;
             } else {
                 sliderP1++;
@@ -1062,7 +1737,7 @@ void keyboard(unsigned char key, int x, int y){
         break;
     case 'j':
         if (hud.getTelaAtual() == hud.MENU_OPCOES){
-            if (sliderP2 > 5){
+            if (sliderP2 > 4){
                 sliderP2 = 1;
             } else {
                 sliderP2++;
@@ -1092,7 +1767,7 @@ void keyboard(unsigned char key, int x, int y){
         break;
     case 'k':
         if (hud.getTelaAtual() == hud.MENU_OPCOES){
-            if (mapa > 4){
+            if (mapa >= 4){
                 mapa = 1;
             } else {
                 mapa++;
@@ -1229,6 +1904,8 @@ void atualizaCena(int periodo){
     bola.testaColisaoComParede();
     slider1.testaColisaoComParede();
     slider2.testaColisaoComParede();
+    bola.testaColisaoComObjeto(obstaculo1.getX(), obstaculo1.getY(), obstaculo1.getAltura(), obstaculo1.getLargura());
+    bola.testaColisaoComObjeto(obstaculo2.getX(), obstaculo2.getY(), obstaculo2.getAltura(), obstaculo2.getLargura());
     bola.testaColisaoComObjeto(slider1.getX(), slider1.getY(), slider1.getAltura(), slider1.getLargura());
     bola.testaColisaoComObjeto(slider2.getX(), slider2.getY(), slider2.getAltura(), slider2.getLargura());
 
@@ -1237,13 +1914,41 @@ void atualizaCena(int periodo){
         bola.setVelocidadeY(bola.getVelocidadeY() + 0.0001);
         bola.setX(bola.getX() + bola.getVelocidadeX());
         bola.setY(bola.getY() + bola.getVelocidadeY());
+
+        if (obstaculo1.getY() <= 100 && hud.getTelaAtual() == hud.JOGOFASE3){
+            obstaculo1.setVelocidadeY(20);
+        } else if (obstaculo1.getY() >= 700 && hud.getTelaAtual() == hud.JOGOFASE3){
+            obstaculo1.setVelocidadeY(-20);
+        }
+
+        if (obstaculo1.getY() <= 100 && hud.getTelaAtual() == hud.JOGOFASE4){
+            obstaculo1.setVelocidadeY(10);
+        } else if (obstaculo1.getY() >= 700 && hud.getTelaAtual() == hud.JOGOFASE4){
+            obstaculo1.setVelocidadeY(-10);
+        }
+
+
+        obstaculo1.setY(obstaculo1.getY() + obstaculo1.getVelocidadeY());
+
+        if (obstaculo2.getY() <= 100 && hud.getTelaAtual() == hud.JOGOFASE3){
+            obstaculo2.setVelocidadeY(20);
+        } else if (obstaculo2.getY() >= 700 && hud.getTelaAtual() == hud.JOGOFASE3){
+            obstaculo2.setVelocidadeY(-20);
+        }
+
+        if (obstaculo2.getY() <= 100 && hud.getTelaAtual() == hud.JOGOFASE4){
+            obstaculo2.setVelocidadeY(10);
+        } else if (obstaculo2.getY() >= 700 && hud.getTelaAtual() == hud.JOGOFASE4){
+            obstaculo2.setVelocidadeY(-10);
+        }
+
+        obstaculo2.setY(obstaculo2.getY() + obstaculo2.getVelocidadeY());
     } else {
         bola.setVelocidadeX(0);
         bola.setVelocidadeY(0);
         bola.setX(bola.getX() + bola.getVelocidadeX());
         bola.setY(bola.getY() + bola.getVelocidadeY());
     }
-
 
     jogo.verificaSet();
 
